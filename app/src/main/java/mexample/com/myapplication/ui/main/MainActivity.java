@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 		injector.inject(this);
-		presenter.attachScreen(this);
 
 		tvMain.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -45,10 +44,16 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
+		presenter.attachScreen(this);
 		presenter.getWeather("Budapest");
-		//Todo showLoading?
+	}
+
+	@Override
+	protected void onStop() {
+		presenter.detachScreen();
+		super.onStop();
 	}
 
 	@Override

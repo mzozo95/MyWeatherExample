@@ -39,17 +39,13 @@ public class MainPresenter extends RxPresenter<MainScreen> {
 				.subscribe(new Consumer<CurrentWeather>() {
 					@Override
 					public void accept(CurrentWeather currentWeather) {
-						if (screen != null) {
-							screen.showWeather(currentWeather);
-						}
+						screen.showWeather(currentWeather);
 					}
 				}, new Consumer<Throwable>() {
 					@Override
 					public void accept(Throwable throwable) {
 						throwable.printStackTrace();
-						if (screen != null) {
-							screen.showError(context.getString(R.string.network_error));
-						}
+						screen.showError(context.getString(R.string.network_error));
 					}
 				}));
 	}
