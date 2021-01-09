@@ -20,47 +20,49 @@ import mexample.com.myapplication.network.util.NetworkUtil;
 import static mexample.com.myapplication.MyWeatherApplication.injector;
 
 public class MainActivity extends AppCompatActivity implements MainScreen {
+	@BindView(R.id.tvMain)
+	TextView tvMain;
+	@BindView(R.id.ivIcon)
+	ImageView ivIcon;
 
-    @BindView(R.id.tvMain)
-    TextView tvMain;
-    @BindView(R.id.ivIcon)
-    ImageView ivIcon;
+	@Inject
+	MainPresenter presenter;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		ButterKnife.bind(this);
+		injector.inject(this);
+		presenter.attachScreen(this);
 
-    @Inject
-    MainPresenter presenter;
+		tvMain.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				presenter.getWeather("Budapest");
+			}
+		});
+	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        injector.inject(this);
-        presenter.attachScreen(this);
+	@Override
+	protected void onResume() {
+		super.onResume();
+		presenter.getWeather("Budapest");
+		//Todo showLoading?
+	}
 
-        tvMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.getWeather("Budapest");
-            }
-        });
-    }
+	@Override
+	public void showWeather(CurrentWeather currentWeather) {
+		//Todo removeLoading
+		tvMain.setText(String.format("%s\n%s", currentWeather.getCityName(), currentWeather.getMainInformation().getTemperature()));
+		Glide.with(this).load(NetworkUtil.generateWeatherIconUrl(currentWeather)).into(ivIcon);
+		Toast.makeText(this, R.string.data_refreshed, Toast.LENGTH_SHORT).show();
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.getWeather("Budapest");
-    }
-
-    @Override
-    public void showWeather(CurrentWeather currentWeather) {
-        tvMain.setText(String.format("%s", currentWeather.getMain().getTemp()));
-        Glide.with(this).load(NetworkUtil.getWeatherIconUrl(currentWeather)).into(ivIcon);
-        Toast.makeText(this, R.string.data_refreshed, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showError(String errorMsg) {
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
-    }
+	@Override
+	public void showError(String errorMsg) {
+		//Todo show ErrorDialog
+		tvMain.setText(errorMsg);
+		Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+	}
 }

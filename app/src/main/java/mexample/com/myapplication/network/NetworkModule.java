@@ -19,37 +19,37 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class NetworkModule {
-    private Context context;
+	private Context context;
 
-    public NetworkModule(Context context) {
-        this.context = context;
-    }
+	public NetworkModule(Context context) {
+		this.context = context;
+	}
 
-    @Provides
-    @Singleton
-    public Retrofit provideRetrofit() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new StethoInterceptor())
-                .addInterceptor(new ChuckInterceptor(context))
-                .build();
+	@Provides
+	@Singleton
+	public Retrofit provideRetrofit() {
+		OkHttpClient client = new OkHttpClient.Builder()
+				.addNetworkInterceptor(new StethoInterceptor())//Todo add logcat network logger!
+				.addInterceptor(new ChuckInterceptor(context))
+				.build();
 
-        return new Retrofit.Builder()
-                .client(client)
-                .baseUrl(WeatherApi.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-    }
+		return new Retrofit.Builder()
+				.client(client)
+				.baseUrl(WeatherApi.BASE_URL)
+				.addConverterFactory(GsonConverterFactory.create())
+				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+				.build();
+	}
 
-    @Provides
-    @Singleton
-    public WeatherApi providePoiApi(Retrofit retrofit) {
-        return retrofit.create(WeatherApi.class);
-    }
+	@Provides
+	@Singleton
+	public WeatherApi provideWeatherApi(Retrofit retrofit) {
+		return retrofit.create(WeatherApi.class);
+	}
 
-    @Provides
-    @Singleton
-    public Gson provideGson(){
-        return new GsonBuilder().create();
-    }
+	@Provides
+	@Singleton
+	public Gson provideGson() {
+		return new GsonBuilder().create();
+	}
 }

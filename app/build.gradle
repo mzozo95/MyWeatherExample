@@ -59,5 +59,4 @@ dependencies {
     //Glide image loader
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
-
 }

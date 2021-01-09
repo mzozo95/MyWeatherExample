@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="network_error">Network error</string>
+    <string name="app_name">OpenWeather Sample</string>
+    <string name="network_error">Network error happened!</string>
     <string name="data_refreshed">Data refreshed!</string>
 </resources>
