@@ -18,6 +18,6 @@ public class WeatherInteractor {
     }
 
     public Observable<CurrentWeather> getWeather(String city){
-        return weatherApi.getCurrentWeather(WeatherApi.appid, WeatherApi.units, city);
+        return weatherApi.getCurrentWeather(WeatherApi.API_KEY, WeatherApi.UNITS, city);
     }
 }

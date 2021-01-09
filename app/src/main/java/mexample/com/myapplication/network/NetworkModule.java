@@ -35,7 +35,7 @@ public class NetworkModule {
 
         return new Retrofit.Builder()
                 .client(client)
-                .baseUrl(WeatherApi.ENDPOINT_URL)
+                .baseUrl(WeatherApi.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
