@@ -1,7 +1,11 @@
 package mexample.com.myapplication.ui;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class RxPresenter<S>  extends Presenter<S> {
     private CompositeDisposable compositeSubscription;
@@ -27,8 +31,25 @@ public class RxPresenter<S>  extends Presenter<S> {
         super.detachScreen();
     }
 
-
-    public void attachSubscription(Disposable subscription) {
+    public void attachDisposable(Disposable subscription) {
         compositeSubscription.add(subscription);
+    }
+
+    private <T> Observable<T> scheduleThreads(Observable<T> o) {
+        return o.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    protected <T> void performRequest(Observable<T> o, Consumer<T> onSuccess, Consumer<? super Throwable> onError) {
+        attachDisposable(scheduleThreads(o).subscribe(onSuccess, onError));
+    }
+
+    protected <T> void performRequest(Observable<T> o, Consumer<T> s) {
+        attachDisposable(scheduleThreads(o).subscribe(s, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }));
     }
 }
