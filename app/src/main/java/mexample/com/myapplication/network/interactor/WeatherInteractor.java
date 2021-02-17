@@ -17,7 +17,7 @@ public class WeatherInteractor {
         injector.inject(this);
     }
 
-    public Observable<CurrentWeather> getWeather(String city){
+    public Observable<CurrentWeather> getWeather(String city) {
         return weatherApi.getCurrentWeather(WeatherApi.API_KEY, WeatherApi.UNITS, city);
     }
 }
