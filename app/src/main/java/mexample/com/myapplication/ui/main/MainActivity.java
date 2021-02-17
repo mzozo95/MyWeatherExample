@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mexample.com.myapplication.R;
 import mexample.com.myapplication.network.model.CurrentWeather;
-import mexample.com.myapplication.network.util.NetworkUtil;
+import mexample.com.myapplication.network.util.WeatherUtil;
 
 import static mexample.com.myapplication.MyWeatherApplication.injector;
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
 		tvMain.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				presenter.getWeather("Budapest");
+				getWeather();
 			}
 		});
 	}
@@ -47,6 +47,11 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
 	protected void onStart() {
 		super.onStart();
 		presenter.attachScreen(this);
+		getWeather();
+	}
+
+	private void getWeather(){
+		//Todo showLoading
 		presenter.getWeather("Budapest");
 	}
 
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
 	public void showWeather(CurrentWeather currentWeather) {
 		//Todo removeLoading
 		tvMain.setText(String.format("%s\n%s", currentWeather.getCityName(), currentWeather.getMainInformation().getTemperature()));
-		Glide.with(this).load(NetworkUtil.generateWeatherIconUrl(currentWeather)).into(ivIcon);
+		Glide.with(this).load(WeatherUtil.generateWeatherIconUrl(currentWeather)).into(ivIcon);
 		Toast.makeText(this, R.string.data_refreshed, Toast.LENGTH_SHORT).show();
 	}
 

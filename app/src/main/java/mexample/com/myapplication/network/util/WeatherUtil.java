@@ -2,7 +2,7 @@ package mexample.com.myapplication.network.util;
 
 import mexample.com.myapplication.network.model.CurrentWeather;
 
-public class NetworkUtil {
+public class WeatherUtil {
     public static String generateWeatherIconUrl(CurrentWeather currentWeather){
         String imgUrl = "";
         if (currentWeather.getWeather().size()>0){

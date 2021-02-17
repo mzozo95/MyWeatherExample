@@ -7,7 +7,7 @@ import com.facebook.stetho.Stetho;
 import mexample.com.myapplication.network.NetworkModule;
 import mexample.com.myapplication.ui.UIModule;
 
-public class MyWeatherApplication  extends MultiDexApplication {
+public class MyWeatherApplication extends MultiDexApplication {
     public static AppComponent injector;
 
     @Override
@@ -15,6 +15,9 @@ public class MyWeatherApplication  extends MultiDexApplication {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
 
-        injector = DaggerAppComponent.builder().uIModule(new UIModule(this)).networkModule(new NetworkModule(this)).build();
+        injector = DaggerAppComponent.builder()
+                .uIModule(new UIModule(this))
+                .networkModule(new NetworkModule(this))
+                .build();
     }
 }
